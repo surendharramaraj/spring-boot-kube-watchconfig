@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active:
+    - dev
+
+  application: 
+    name: springbootdemoapplications
+  cloud: 
+    kubernetes:  
+      reload: 
+        period: 3000
+        enabled: true
+        mode: event
+        strategy: refresh
+management: 
+  endpoints: 
+    web: 
+      exposure: 
+        include: refresh,info,health
+  endpoint: 
+    restart: 
+      enabled: true

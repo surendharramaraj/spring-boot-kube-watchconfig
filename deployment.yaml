@@ -1,0 +1,44 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: env-springboot-pod2
+  namespace: springboot-oc-demo
+spec:
+  selector:
+    app: oc-spring-env
+  replicas: 1
+  template:
+    restartPolicy: Never
+    metadata:
+      labels: 
+        app: oc-spring-env
+    spec:
+      containers:
+        - name: oc-spring-env
+          image: >-
+            docker.io/wireghost13/springboot-watcher1:v1
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env: 
+            - name: ACTIVEPROFILE
+              valueFrom: 
+               configMapKeyRef: 
+                name: active-profile
+                key : envProfile
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: env-springboot-pod2
+  namespace: springboot-oc-demo
+spec:
+  selector:
+    app.kubernetes.io/name: springboot-oc
+  ports:
+  - name: springboot
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
